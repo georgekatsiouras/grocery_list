@@ -1,0 +1,178 @@
+<div class="primary col-md-8 col-xs-12">
+        <div class="row">
+            <div class="col-md-3">
+                <h2>List of Products</h2>
+            </div>
+            <div class="col-md-9">
+                <div class="pull-right">
+                    <button class="btn btn-primary" ng-click="sortType = 'supermarket'; sortReverse = !sortReverse;">
+                        Sort by Supermarket
+                        <span ng-show="sortType == 'supermarket' && sortReverse" class="fa fa-caret-down">
+                            <small> (desc)</small>
+                        </span>
+                        <span ng-show="sortType == 'supermarket' && !sortReverse" class="fa fa-caret-up">
+                            <small> (asc)</small>
+                        </span>
+                    </button>
+                    <button class="btn btn-primary" ng-click="sortType = 'name'; sortReverse = !sortReverse;">
+                        Sort by Name
+                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-down">
+                            <small> (desc)</small>
+                        </span>
+                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-up">
+                            <small> (asc)</small>
+                        </span>
+                    </button>
+                    <button class="btn btn-primary" ng-click="sortType = 'price'; sortReverse = !sortReverse;">
+                        Sort by Total Price
+                        <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-down">
+                            <small> (desc)</small>
+                        </span>
+                        <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-up">
+                            <small> (asc)</small>
+                        </span>
+                    </button>
+                    <button class="btn btn-primary" ng-click="sortType = 'total'; sortReverse = !sortReverse;">
+                        Sort by Unit Price
+                        <span ng-show="sortType == 'total' && sortReverse" class="fa fa-caret-down">
+                            <small> (desc)</small>
+                        </span>
+                        <span ng-show="sortType == 'total' && !sortReverse" class="fa fa-caret-up">
+                            <small> (asc)</small>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-1">
+                <h2>Search the List</h2>
+            </div>
+            <div class="col-sm-7">
+                <form class="navbar-form navbar-right">
+                    <div class="form-group pull-left">
+                        <input type="text" class="form-control" placeholder="Search" ng-model="searchKeyword">
+                    </div>
+                    <button type="submit" class="btn btn-default">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div ng-repeat="product in products | filter: searchKeyword | orderBy:''+sortType+'':sortReverse track by $index" ng-show="product.quantity!=0"
+            class="col-md-10 col-md-offset-1 product">
+            <div class="row">
+                <div class="col-md-7 col-xs-9">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-6 product-label">Product Name:</div>
+                        <div class="col-md-6 col-xs-6">
+                            <p class="title" ng-bind="product.name | capitalizefilter"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 product-label col-xs-6">Unit Price:</div>
+                        <div class="col-md-6 col-xs-6">
+                            <p class="title" ng-bind="product.price | currency:'€ ' "></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-6 product-label">Inserted on:</div>
+                        <div class="col-md-6 col-xs-6">
+                            <p class="title" ng-bind="product.lbdate | date : 'dd MMM yyyy' "></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-6 product-label">Where to buy:</div>
+                        <div class="col-md-6 col-xs-6">
+                            <p class="title" ng-bind="product.supermarket"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-6 product-label">Quantity to buy:</div>
+                        <div class="col-md-6 col-xs-6">
+                            <p class="title" ng-bind="product.quantity"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-6 product-label">Total for this product:</div>
+                        <div class="col-md-6 col-xs-6">
+                            <p class="title" ng-bind="product.totalwithcurrency"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-xs-2 symbols">
+                    <button class="btn-container plus" ng-click="plusOne(product)">
+                        <i class="fa fa-plus btn plus-icon" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn-container minus" ng-click="minusOne(product)">
+                        <i class="fa fa-minus btn minus-icon" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="col-md-3 col-xs-2">
+                    <p class="btn btn-success all-to-cart" ng-click="moveToCart(product)">
+                        <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                    </p>
+                    <p class="btn btn-danger pull-right remove-item" ng-click="removeItem(product)">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-10 col-md-offset-1" ng-show="ProductsFinished()">
+                <h2>The list of products is empty</h2>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar col-md-4 col-xs-12">
+        <div class="col-md-10 sidebar-content">
+            <h2>Upload a list</h2>
+            <div class="row"> 
+                <form class="upload-form">
+                    <label id="browseLabel" for="uploadList">Browse</label>
+                    <input type="file" id="uploadList" name="uploadList"/>
+                    <button class="btn btn-success uploadList" ng-click="uploadList()">Upload</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-10 sidebar-content">
+            <h2>Add a new Product on the list</h2>
+            <div class="row">                   
+                <form name="productForm" ng-submit="addToList()">                        
+                    <div class="col-md-5 col-xs-6 product-label">Name:</div>
+                    <div class="col-md-7 col-xs-6">
+                        <input type="text" ng-model="product.name" class="form-control" placeholder="name"></input>
+                    </div>
+                    <div class="col-md-5 col-xs-6 product-label">Price:</div>
+                    <div class="col-md-7 col-xs-6">
+                        <input type="number" ng-model="product.price" step="0.01" class="form-control" placeholder="0.00"></input>
+                    </div>
+                    <div class="col-md-5 col-xs-6 product-label">Quantity:</div>
+                    <div class="col-md-7 col-xs-6">
+                        <input type="number" ng-model="product.quantity" class="form-control" placeholder="0"></input>
+                    </div>
+                    <div class="col-md-5 col-xs-6 product-label">Supermarket:</div>
+                    <div class="col-md-7 col-xs-6">
+                        <input type="text" ng-model="product.supermarket" class="form-control" placeholder="supermarket"></input>
+                    </div>
+                    <div class="col-md-7 col-xs-12"></div>
+                    <input type="submit" value="Add to the List" class="btn btn-success addToList">
+            </div>
+            </form>
+        </div>
+        <div class="col-md-10 sidebar-content">
+            <div class="row">
+                <div class="col-md-7 col-xs-7 product-label">
+                    <h2>Total for this list:</h2>                  
+                </div>
+                <div class="col-md-5 col-xs-5">
+                    <span class="total" ng-bind="totalForList()"></span>
+                </div>
+                <div class="col-md-7 col-xs-7 product-label">
+                        <h2>Total in cart:</h2>                    
+                </div>
+                <div class="col-md-5 col-xs-5">
+                        <span class="total" ng-bind="totalInCart()"></span>                                      
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
