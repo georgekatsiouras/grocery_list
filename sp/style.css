@@ -174,3 +174,9 @@ body {
 		margin-right: 15px;
 	}
 }
+@media only screen and (max-width: 340px) {
+	.remove-item{
+  		position: relative;
+   		left: 54px;
+	}
+}
